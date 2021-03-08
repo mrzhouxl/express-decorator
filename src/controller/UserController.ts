@@ -1,11 +1,11 @@
-import {Controller, Get} from '../decorators/common'
+import {Body, Controller, Get, Post} from '../decorators/common'
 
 @Controller('/User')
 export class UserController{
 
-  @Get('/test')
-  add(res:any,req:any){
-    console.log(11)
+  @Post('/test')
+  add(@Body() body:any){
+    console.log(body)
     return {
       a:11
     }
