@@ -38,7 +38,7 @@ function extractParameters(req, res, params) {
         'response': function () { return res; },
     };
     params.forEach(function (param) {
-        args.push(paramHandlerTpe[param.key](param.key));
+        args.push(paramHandlerTpe[param.key](param.field));
     });
     return args;
 }
@@ -52,13 +52,10 @@ function register(app, controller) {
             var attrMethod = Reflect.getMetadata('method', new v(), key);
             var attrPath = Reflect.getMetadata('path', new v(), key);
             var attrParams = Reflect.getMetadata('params', new v(), key);
-            attrParams = _.sortBy(attrParams, function (v) { return v.index; });
-            //express router callback
+            attrParams = _.sortBy(attrParams, function (v) { return v.index; }); //用来排序的
             //@ts-ignore
             var fn = function (req, res, next) {
-                // let params=[req,res]
                 var params = extractParameters(req, res, attrParams);
-                console.log(params, '=>>>');
                 var result = new v()[key].apply(new v(), params);
                 if (result instanceof Promise) {
                     result.then(function (value) {

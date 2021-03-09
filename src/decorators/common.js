@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Body = exports.Post = exports.Get = exports.createdMethod = exports.Controller = void 0;
+exports.Query = exports.Body = exports.Post = exports.Get = exports.createdMethod = exports.Controller = void 0;
 require("reflect-metadata");
 var METHOD_METADETA = 'method';
 var PATH_METADETA = 'path';
@@ -23,22 +23,17 @@ function createdMethod(methods) {
     };
 }
 exports.createdMethod = createdMethod;
+//要想加其他的装饰器用这个方法在添加就行了
 exports.Get = createdMethod('get');
 exports.Post = createdMethod('post');
-function Body() {
-    // Reflect.getMetadata()
-    return function (target, name, index) {
-        var params = Reflect.getMetadata(PARAMS_METADETA, target.constructor, name) || [];
-        console.log(params);
-        if (params.length != 0) {
-            params.push({ key: 'body', index: index });
+exports.Body = createParams("body");
+exports.Query = createParams("query");
+function createParams(param) {
+    return function (field) {
+        return function (target, name, index) {
+            var params = Reflect.getMetadata(PARAMS_METADETA, new target.constructor(), name) || [];
+            params.push({ key: param, index: index, field: field });
             Reflect.defineMetadata(PARAMS_METADETA, params, target, name);
-        }
-        else {
-            var defineParams = [];
-            defineParams.push({ key: 'body', index: index });
-            Reflect.defineMetadata(PARAMS_METADETA, defineParams, target, name);
-        }
+        };
     };
 }
-exports.Body = Body;

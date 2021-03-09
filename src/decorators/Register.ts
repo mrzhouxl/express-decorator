@@ -19,7 +19,7 @@ function extractParameters(req: any, res: any, params: any) {
   }
 
   params.forEach((param: any) => {
-    args.push(paramHandlerTpe[param.key](param.key))
+    args.push(paramHandlerTpe[param.key](param.field))
   })
   return args;
 }
@@ -38,14 +38,10 @@ export function register(app: any, controller: Array<any>) {
       let attrMethod = Reflect.getMetadata('method', new v(), key);
       let attrPath = Reflect.getMetadata('path', new v(), key);
       let attrParams = Reflect.getMetadata('params', new v(), key);
-      attrParams = _.sortBy(attrParams, (v) => v.index)
-      //express router callback
+      attrParams = _.sortBy(attrParams, (v) => v.index) //用来排序的
       //@ts-ignore
       let fn: any = (req, res, next) => {
-        // let params=[req,res]
         let params = extractParameters(req, res, attrParams)
-        console.log(params,'=>>>')
-
         let result = new v()[key].apply(new v(), params)
         if (result instanceof Promise) {
           result.then(value => {

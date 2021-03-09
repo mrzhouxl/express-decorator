@@ -21,23 +21,23 @@ export function createdMethod(methods: string) {
   }
 }
 
+//要想加其他的装饰器用这个方法在添加就行了
 export const Get = createdMethod('get')
 export const Post = createdMethod('post')
 
-export function Body(): ParameterDecorator {
-  // Reflect.getMetadata()
-  return (target: any, name: string | symbol, index: number) => {
-    let params = Reflect.getMetadata(PARAMS_METADETA, target.constructor, name)||[]
-    console.log(params)
-    if (params.length != 0) {
-      params.push({ key: 'body', index: index })
-      Reflect.defineMetadata(PARAMS_METADETA, params, target, name)
-    } else {
-      let defineParams = []
-      defineParams.push({ key: 'body', index })
-      Reflect.defineMetadata(PARAMS_METADETA, defineParams, target, name)
-    }
-  }
+
+export const Body = createParams("body");
+export const Query = createParams("query");
+
+function createParams(param:string) {
+  return (field?:string) => {
+    return (target: any, name: string, index: number) => {
+      let params =
+        Reflect.getMetadata(PARAMS_METADETA,new target.constructor(), name) || [];
+      params.push({ key: param, index: index,field:field });
+      Reflect.defineMetadata(PARAMS_METADETA, params, target, name);
+    };
+  };
 }
 
 

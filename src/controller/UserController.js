@@ -17,15 +17,15 @@ var common_1 = require("../decorators/common");
 var UserController = /** @class */ (function () {
     function UserController() {
     }
-    UserController.prototype.add = function (body, res) {
-        console.log(body);
+    UserController.prototype.add = function (body, query) {
+        console.log(body, query);
         return {
             a: 11
         };
     };
     __decorate([
         common_1.Post('/test'),
-        __param(0, common_1.Body()),
+        __param(0, common_1.Body()), __param(1, common_1.Query('user')),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
