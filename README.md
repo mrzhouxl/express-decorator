@@ -35,6 +35,6 @@
 
   }
  ```
-## 用于联系，博客地址https://www.cnblogs.com/silentCM/p/14509664.html
+## 用于练习，博客地址https://www.cnblogs.com/silentCM/p/14509664.html
 
 ## 希望对各位有用，希望点个star
